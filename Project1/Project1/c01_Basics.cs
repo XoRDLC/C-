@@ -139,4 +139,9 @@ namespace Project1
             Debugger.Log(0, cat.ToString(), msg + "\n");
         }
     }
+
+    partial class Class3P
+    {
+        partial void Print(int x) { c01_Basics.Log(x.ToString()); }
+    }
 }

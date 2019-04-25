@@ -28,6 +28,19 @@ namespace Project1
             _instanceCount = 0;
         }
 
+        //private void Dummy() { 
+        public static void Main(String[] args)
+        {
+            Log(c01_Basics.GetInstanceCount.ToString());
+            c01_Basics class2 = new c01_Basics("Programmer");
+            Log(c01_Basics.GetInstanceCount.ToString());
+            Log(class2.Name);
+            c01_Basics class1 = new c01_Basics(64);
+            Log(c01_Basics.GetInstanceCount.ToString());
+            c01_Basics class3 = new c01_Basics("Senior Programmer");
+            Log(c01_Basics.GetInstanceCount.ToString());
+        }
+
         public double this[int index]
         {
             set
@@ -51,31 +64,24 @@ namespace Project1
                 }
             }
         }
+        public string Name {
+            get => this.name;
+        }
 
         private c01_Basics() {
             Log(name);
             _instanceCount++;
         }
 
-        public c01_Basics(string name) {
+        public c01_Basics(string name):this() {
             this.name = name;
         }
 
-        public c01_Basics(int _readonly ) {
+        public c01_Basics(int _readonly ):this() {
             Log(_readonly.ToString());
             this._readonly = _readonly;
         }
-        /*
-        public static void Main(String[] args)
-        {
-            c01_Basics class2 = new c01_Basics( "Programmer" );
-            Log(c01_Basics.GetInstanceCount.ToString());
-            c01_Basics class1 = new c01_Basics(64);
-            Log(c01_Basics.GetInstanceCount.ToString());
-            c01_Basics class3 = new c01_Basics("Senior Programmer");
-            Log(c01_Basics.GetInstanceCount.ToString());
-        }*/
-
+        
         public static int GetInstanceCount {            
             get => _instanceCount;
         }

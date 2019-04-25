@@ -8,7 +8,8 @@ namespace Project1
 {
     class Class2
     {
-        public static void Main() {
+        private void Dummy() { 
+        //public static void Main() {
             /*
             c01_Basics c01 = new c01_Basics("Middle");
             c01[0] = 20;

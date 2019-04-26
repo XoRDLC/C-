@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project1
 {
-    class Class2
+    class c02_Classes
     {
         private void Dummy() { 
         //public static void Main() {
@@ -34,9 +34,27 @@ namespace Project1
             check.MPrint();
             check.OPrint();
             check.VPrint();
+
+            Sealed sl = new Sealed(13, 26);
+            c01_Basics.Log("Average:\t" + sl.Average().ToString());
+            c01_Basics.Log("Sum:\t\t" + sl.Sum().ToString());
         }
     }
 
+    public static class SealedExt{
+        public static int Sum(this Sealed s) => (int)( s.Average() * 2f);
+    }
+
+    public sealed class Sealed {
+        private readonly int a;
+        private readonly int b;
+
+        public Sealed(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+        public double Average() => (a + b) / 2f;        
+    }
 
     partial class Class3P {
         public Class3P()
@@ -46,7 +64,6 @@ namespace Project1
 
         partial void Print(int x);
     }
-
     class Base {
         public virtual void VPrint()
         {

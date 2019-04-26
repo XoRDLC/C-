@@ -36,7 +36,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="c01_Basics.cs" />
-    <Compile Include="Class2.cs" />
+    <Compile Include="c02_Classes.cs" />
+    <Compile Include="Class3.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

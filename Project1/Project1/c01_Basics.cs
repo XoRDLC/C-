@@ -28,9 +28,8 @@ namespace Project1
             _instanceCount = 0;
         }
 
-        //private void Dummy() { 
-        public static void Main(String[] args)
-        {
+        private void Dummy() {
+        //public static void Main(String[] args){
             Log(c01_Basics.GetInstanceCount.ToString());
             c01_Basics class2 = new c01_Basics("Programmer");
             Log(c01_Basics.GetInstanceCount.ToString());

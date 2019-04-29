@@ -4,9 +4,10 @@ namespace Project1
 {
     class Statics
     {
-        public static void Log(string msg)
+        public static void Log(object msg)
         {
-            Debugger.Log(0, "", msg + "\n");
+
+            Debugger.Log(0, "", msg.ToString() + "\n");
         }
     }
 }

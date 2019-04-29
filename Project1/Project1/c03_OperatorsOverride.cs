@@ -1,14 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Project1
 {
-    class Class3
-    {
-        public static void Main()
+    class c03_OperatorsOverride
+    {   
+        public void Dummy()
+        //public static void Main()
+        {
+            Test_typeof();
+            Test_operatorsOverride();
+        }
+        #region "typeof iterations, Test_typeof()"
+        protected static void Test_typeof() {
+            Type t = typeof(c03_OperatorsOverride);
+            FieldInfo[] fi = t.GetFields();
+            MethodInfo[] mti = t.GetMethods();
+            MemberInfo[] mmi = t.GetMembers();
+
+            foreach (FieldInfo f in fi) {
+                Statics.Log(f.Name);
+            }
+
+            Statics.Log("----");
+
+            foreach (MethodInfo m in mti) {
+                Statics.Log(m.Name);
+            }
+
+            Statics.Log("----");
+
+            foreach (MemberInfo m in mmi) {
+                Statics.Log(m.Name);
+            }
+        }
+        #endregion
+        #region "operator override, Test_operatorsOverride()"
+        protected static void Test_operatorsOverride()
         {
             Operators op = new Operators(10, "Tester");
             op = op + 10;
@@ -19,10 +47,11 @@ namespace Project1
             Statics.Log(op.Age.ToString());
             Operators op1 = 40;
             Statics.Log(op1.Name);
-
         }
+        #endregion
     }
 
+    #region "operators override"
     class Operators
     {
         private readonly string name;
@@ -33,7 +62,7 @@ namespace Project1
         {
             this.age = age;
             this.name = name;
-        }
+        }        
 
         public float Age
         {
@@ -76,4 +105,5 @@ namespace Project1
             return oper;
         }
     }
+    #endregion
 }

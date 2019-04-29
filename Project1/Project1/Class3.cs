@@ -48,14 +48,12 @@ namespace Project1
 
         public static Operators operator +(Operators op, float newage)
         {
-            Statics.Log("+");
             Operators operators = new Operators(op.Age, op.Name);
             operators.Age = op.Age + newage;
             return operators;
         }
         public static Operators operator -(Operators op, float newage)
         {
-            Statics.Log("-");
             Operators operators = new Operators(op.Age, op.Name);
             operators.Age = op.Age - newage;
             return operators;
@@ -63,22 +61,18 @@ namespace Project1
 
         public static Operators operator ++(Operators op)
         {
-            Statics.Log("++");
             Operators operators = new Operators(op.Age, op.Name);
             operators.Age = ++op.Age;
             return operators;
         }
         public static implicit operator int(Operators op)
         {
-            Statics.Log("int");
             return (int)op.Age;
         }
 
         public static implicit operator Operators(int newAge)
         {
-            Statics.Log("Operators1");
             Operators oper = new Operators(newAge, "Dummy");
-            Statics.Log("Operators2");
             return oper;
         }
     }

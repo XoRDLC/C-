@@ -53,11 +53,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="c01_Basics.cs" />
-    <Compile Include="c02_Classes.cs" />
+    <Compile Include="C01_Basics.cs" />
+    <Compile Include="C02_Classes.cs" />
+    <Compile Include="C04_Switch.cs" />
+    <Compile Include="C05_UsingStatement.cs" />
+    <Compile Include="_Main.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="ExcelTry.cs" />
-    <Compile Include="c03_OperatorsOverride.cs" />
+    <Compile Include="C03_OperatorsOverride.cs" />
     <Compile Include="Statics.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +89,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

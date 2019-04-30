@@ -3,17 +3,16 @@ using System.Reflection;
 
 namespace Project1
 {
-    class c03_OperatorsOverride
+    class C03_OperatorsOverride
     {   
-        public void Dummy()
-        //public static void Main()
+        public void Main()
         {
             Test_typeof();
             Test_operatorsOverride();
         }
         #region "typeof iterations, Test_typeof()"
         protected static void Test_typeof() {
-            Type t = typeof(c03_OperatorsOverride);
+            Type t = typeof(C03_OperatorsOverride);
             FieldInfo[] fi = t.GetFields();
             MethodInfo[] mti = t.GetMethods();
             MemberInfo[] mmi = t.GetMembers();

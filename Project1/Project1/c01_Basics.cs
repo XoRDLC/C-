@@ -8,7 +8,7 @@ namespace Project1
         ERROR,
         ABNORMAL        
     }
-    public class c01_Basics
+    public class C01_Basics
     {
         readonly public string name;
         private static int _instanceCount;
@@ -20,20 +20,19 @@ namespace Project1
         private double weight;
         private byte age;
 
-        static c01_Basics() {
+        static C01_Basics() {
             _instanceCount = 0;
         }
 
-        private void Dummy() {
-        //public static void Main(String[] args){
-            Log(c01_Basics.GetInstanceCount.ToString());
-            c01_Basics class2 = new c01_Basics("Programmer");
-            Log(c01_Basics.GetInstanceCount.ToString());
+        public void Main(String[] args){
+            Log(C01_Basics.GetInstanceCount.ToString());
+            C01_Basics class2 = new C01_Basics("Programmer");
+            Log(C01_Basics.GetInstanceCount.ToString());
             Log(class2.Name);
-            c01_Basics class1 = new c01_Basics(64);
-            Log(c01_Basics.GetInstanceCount.ToString());
-            c01_Basics class3 = new c01_Basics("Senior Programmer");
-            Log(c01_Basics.GetInstanceCount.ToString());
+            C01_Basics class1 = new C01_Basics(64);
+            Log(C01_Basics.GetInstanceCount.ToString());
+            C01_Basics class3 = new C01_Basics("Senior Programmer");
+            Log(C01_Basics.GetInstanceCount.ToString());
         }
 
         public double this[int index]
@@ -63,16 +62,16 @@ namespace Project1
             get => this.name;
         }
 
-        private c01_Basics() {
+        private C01_Basics() {
             Log(name);
             _instanceCount++;
         }
 
-        public c01_Basics(string name):this() {
+        public C01_Basics(string name):this() {
             this.name = name;
         }
 
-        public c01_Basics(int _readonly ):this() {
+        public C01_Basics(int _readonly ):this() {
             Log(_readonly.ToString());
             this._readonly = _readonly;
         }
@@ -143,6 +142,6 @@ namespace Project1
 
     partial class Class3P
     {
-        partial void Print(int x) { c01_Basics.Log(x.ToString()); }
+        partial void Print(int x) { C01_Basics.Log(x.ToString()); }
     }
 }

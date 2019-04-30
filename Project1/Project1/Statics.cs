@@ -6,7 +6,6 @@ namespace Project1
     {
         public static void Log(object msg)
         {
-
             Debugger.Log(0, "", msg.ToString() + "\n");
         }
     }

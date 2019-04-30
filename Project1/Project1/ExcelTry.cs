@@ -11,9 +11,13 @@ namespace Project1
         {
             Excel.Application exlApp = new Excel.Application();
             exlApp.Visible = true;
-            exlApp.Workbooks.Open(filePath);
+            Excel.Workbook wb = exlApp.Workbooks.Open(filePath);
             exlApp.DisplayAlerts = false;
-            exlApp.Quit();
+            Excel.Worksheet sh = wb.ActiveSheet;
+            Excel.Range cell = sh.Cells.Item[1];
+            cell.Value = "Test";
+
+            //exlApp.Quit();
         }
     }    
 }

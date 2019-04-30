@@ -1,9 +1,8 @@
 ﻿namespace Project1
 {
-    class c02_Classes
+    class C02_Classes
     {
-        private void Dummy() { 
-        //public static void Main() {
+        public void Main() {
             /*
             c01_Basics c01 = new c01_Basics("Middle");
             c01[0] = 20;
@@ -30,8 +29,8 @@
             check.VPrint();
 
             Sealed sl = new Sealed(13, 26);
-            c01_Basics.Log("Average:\t" + sl.Average().ToString());
-            c01_Basics.Log("Sum:\t\t" + sl.Sum().ToString());
+            C01_Basics.Log("Average:\t" + sl.Average().ToString());
+            C01_Basics.Log("Sum:\t\t" + sl.Sum().ToString());
         }
     }
 
@@ -61,25 +60,25 @@
     class Base {
         public virtual void VPrint()
         {
-            c01_Basics.Log("Base.Print virtual");
+            C01_Basics.Log("Base.Print virtual");
         }
         public void MPrint()
         {
-            c01_Basics.Log("Base.Print for mask");
+            C01_Basics.Log("Base.Print for mask");
         }
 
         public void OPrint() {
-            c01_Basics.Log("Base.Print");            
+            C01_Basics.Log("Base.Print");            
         }
     }
     class Derived :Base{
         public override void VPrint()
         {
-            c01_Basics.Log("Derived.Print virtual");
+            C01_Basics.Log("Derived.Print virtual");
         }
 
         new public void MPrint() {
-            c01_Basics.Log("Derived.Print masked");
+            C01_Basics.Log("Derived.Print masked");
         }
     }
 }

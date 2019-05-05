@@ -6,8 +6,8 @@ namespace Project1
     class C05_UsingStatement
     {
         public void Main()
-        {              
-            
+        {
+            Test_Statements();
         }
 
         #region "using and statements, Test_Statements()"

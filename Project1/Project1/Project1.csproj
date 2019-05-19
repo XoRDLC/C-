@@ -58,6 +58,7 @@
     <Compile Include="C04_Switch.cs" />
     <Compile Include="C05_UsingStatement.cs" />
     <Compile Include="C07_Arrays.cs" />
+    <Compile Include="C08_Delegates.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="_Main.cs" />
     <Compile Include="C06_StructEnum.cs" />

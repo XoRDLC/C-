@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Project1
+namespace Learning
 {
     class Statics
     {

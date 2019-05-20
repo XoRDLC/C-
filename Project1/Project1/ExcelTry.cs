@@ -1,6 +1,6 @@
 ﻿using System;
 using Excel = Microsoft.Office.Interop.Excel;
-namespace Project1
+namespace Learning
 {
     class ExcelTry
     {

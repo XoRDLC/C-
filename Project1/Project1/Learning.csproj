@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D338DA00-05EB-49BB-8FBC-45F9BF9EA813}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Project1</RootNamespace>
-    <AssemblyName>Project1</AssemblyName>
+    <RootNamespace>Learning</RootNamespace>
+    <AssemblyName>Learning</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

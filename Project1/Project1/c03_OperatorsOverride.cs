@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Project1
+namespace Learning
 {
     class C03_OperatorsOverride
     {   

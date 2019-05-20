@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Project1
+namespace Learning
 {
     class C05_UsingStatement
     {

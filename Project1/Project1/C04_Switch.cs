@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project1
+namespace Learning
 {
     class C04_Switch
     {

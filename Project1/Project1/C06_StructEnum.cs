@@ -1,7 +1,7 @@
 ﻿using System;
-using static Project1.ArabicEnumerates;
+using static Learning.ArabicEnumerates;
 
-namespace Project1
+namespace Learning
 {
     class C06_StructEnum
     {

@@ -1,4 +1,4 @@
-﻿namespace Project1
+﻿namespace Learning
 {
     class C02_Classes
     {

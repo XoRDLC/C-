@@ -1,8 +1,8 @@
 ﻿using System;
-using static Project1.Statics;
+using static Learning.Statics;
 
 
-namespace Project1
+namespace Learning
 {
     class C07_Arrays
     {

@@ -1,26 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using System.Drawing;
+using System;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 //https://blogs.msdn.microsoft.com/toub/2006/05/03/low-level-keyboard-hook-in-c/
 namespace ScreenShoter
 {
-    using System;
-    using System.Diagnostics;
-    using System.Windows.Forms;
-    using System.Runtime.InteropServices;
-
     class InterceptKeys
 
     {
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
-        private LowLevelKeyboardProc _proc ;
+        private readonly LowLevelKeyboardProc _proc ;
         private static IntPtr _hookID = IntPtr.Zero;
-        private Keys stopKey = Keys.PrintScreen;
+
+        private const Keys stopKeyZP = Keys.PrintScreen;
+        private const Keys stopKeySP = Keys.F10;
+        private const Keys stopKeyDeleteLast_Key1 = Keys.LControlKey;
+        private const Keys stopKeyDeleteLast_Key2 = Keys.Back;
+        private Keys lastPressedKey = Keys.None;
+
+        private ExcelAPI screensZP = null;
+        private ExcelAPI screensSP = null;
+        private ExcelAPI currentApi = null;
 
         [STAThread]
         public void Run()        {
@@ -29,8 +33,7 @@ namespace ScreenShoter
             UnhookWindowsHookEx(_hookID);
         }
 
-        public InterceptKeys(Keys stopKey) {
-            this.stopKey = stopKey;
+        public InterceptKeys() {
             _proc = HookCallback;
         }
 
@@ -47,14 +50,51 @@ namespace ScreenShoter
         private delegate IntPtr LowLevelKeyboardProc(
             int nCode, IntPtr wParam, IntPtr lParam);
 
+        [STAThread]
         private IntPtr HookCallback(
             int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                Console.WriteLine($"{vkCode}\t{(Keys)vkCode}");
-                if (vkCode == (int)stopKey) ScreenShoter.GetSH(); 
+                bool isDeleteLast =
+                    (lastPressedKey == stopKeyDeleteLast_Key1 &&
+                     (Keys)vkCode == stopKeyDeleteLast_Key2);
+
+                Console.WriteLine($"{vkCode}\t{(Keys)vkCode}\t{isDeleteLast}\t{lastPressedKey}");
+                lastPressedKey = (Keys)vkCode;
+
+                if ((Keys)vkCode == stopKeyZP || 
+                    (Keys)vkCode == stopKeySP ||
+                    isDeleteLast) 
+                {
+                    Thread thread = new Thread(() => {
+                        Bitmap BM = null;
+                        string url = null;
+                        if (!isDeleteLast) {
+                            BM = ScreenShoter.GetBitmap(out string process);
+                            url = BrowserHandler.GetURL(process); }
+                        switch ((Keys)vkCode)
+                        {
+                            case stopKeyZP:
+                                if (screensZP == null) screensZP = new ExcelAPI();
+                                screensZP.PasteInWorksheet(url, ref BM);
+                                currentApi = screensZP;
+                                break;
+                            case stopKeySP:
+                                if (screensSP == null) screensSP = new ExcelAPI();
+                                screensSP.PasteInWorksheet(url, ref BM);
+                                currentApi = screensSP;
+                                break;
+                            default:
+                                if (isDeleteLast && currentApi != null)
+                                    currentApi.DeleteLastShape();
+                                break;
+                        }
+                    });
+                    thread.Start();
+                    thread.Join();
+                }
             }
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }

@@ -1,27 +1,95 @@
-﻿using System.Drawing;
-using System.Threading;
+﻿using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ScreenShoter
 {
     public static class ScreenShoter
     {
-        public static void GetSH()
+        private const int CUT_TOP_DEF = 36;
+        private const int CUT_BOTTOM_DEF = 63;
+        private const int CUT_LEFT_DEF = 0;
+        private const int CUT_RIGHT_DEF = 0;
+        private const double ZOOM_DEF = 0.5;
+
+        public static Bitmap GetBitmap(out string process)
         {
-            string url = Class3.GetURL("chrome");
-            Bitmap BM = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            ScreenShoter.GetSettings(
+                out int cutTop, out int cutBottom,
+                out int cutLeft, out int cutRight, 
+                out double zoom, out process);
+
+            Bitmap BM = new Bitmap(
+                Screen.PrimaryScreen.Bounds.Width - cutRight, 
+                Screen.PrimaryScreen.Bounds.Height - cutBottom);
+
             Graphics GH = Graphics.FromImage(BM as Image);
-            GH.CopyFromScreen(0, 0, 0, 0, BM.Size);
+            GH.CopyFromScreen(cutLeft, cutTop, 0, 0, BM.Size);
 
-            //SaveFileDialog SFD = new SaveFileDialog();
-            //SFD.Filter = "PNG|*.png|JPEG|*.jpg|GIF|*.gif|BMP|*.bmp";
-            //if (SFD.ShowDialog() == DialogResult.OK)
-            //{
-            //    BM.Save(SFD.FileName);
-            //}
+            Size newSize = new Size(
+                (int)(BM.Width * zoom), 
+                (int)(BM.Height * zoom));
 
-            ExcelAPI.Dummy(GH, url);
+            BM = new Bitmap(BM, newSize);
+
+            GH.Dispose();
+            return BM;
+        }
+        private static void GetSettings(out int cutTop, out int cutBottom,
+            out int cutLeft, out int cutRight, out double zoom, 
+            out string process) {
+            string activeWindow = GetActiveWindowTitle();
+
+            if (activeWindow.IndexOf("Google Chrome") >= 0)
+            {
+                cutTop = CUT_TOP_DEF;
+                cutBottom = CUT_BOTTOM_DEF;
+                cutLeft = CUT_LEFT_DEF;
+                cutRight = CUT_RIGHT_DEF;
+                zoom = ZOOM_DEF;
+                process = BrowserHandler.PROCESS_CHROME;
+            }
+            else if (activeWindow.IndexOf("Яндекс.Браузер") >= 0 ||
+                activeWindow.IndexOf("Opera") >= 0 ||
+                activeWindow.IndexOf("Firefox") >= 0) {
+                cutTop = CUT_TOP_DEF;
+                cutBottom = CUT_BOTTOM_DEF;
+                cutLeft = CUT_LEFT_DEF;
+                cutRight = CUT_RIGHT_DEF;
+                zoom = ZOOM_DEF;
+                process = BrowserHandler.PROCESS_UNKNOWN;
+            }
+            else
+            {
+                cutTop = 0;
+                cutBottom = CUT_BOTTOM_DEF;
+                cutLeft = 0;
+                cutRight = 0;
+                zoom = 0.75;
+                process = BrowserHandler.PROCESS_UNKNOWN;
+            }
+                
         }
 
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        private static string GetActiveWindowTitle()
+        {
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            IntPtr handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString();
+            }
+            return null;
+        }
     }
 }

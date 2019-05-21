@@ -1,187 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-//https://social.msdn.microsoft.com/Forums/en-US/b5721e4f-6b58-465e-82eb-629613c7de4a/get-url-from-browser-in-c?forum=netfxnetcom
-namespace Library.Net.DataStructs
-{
-    [StructLayout(LayoutKind.Sequential)]
-    public struct INTERNET_CACHE_ENTRY_INFO
-    {
-        public UInt32 dwStructSize;
-        public string lpszSourceUrlName;
-        public string lpszLocalFileName;
-        public UInt32 CacheEntryType;
-        public UInt32 dwUseCount;
-        public UInt32 dwHitRate;
-        public UInt32 dwSizeLow;
-        public UInt32 dwSizeHigh;
-        public System.Runtime.InteropServices.ComTypes.FILETIME LastModifiedTime;
-        public System.Runtime.InteropServices.ComTypes.FILETIME ExpireTime;
-        public System.Runtime.InteropServices.ComTypes.FILETIME LastAccessTime;
-        public System.Runtime.InteropServices.ComTypes.FILETIME LastSyncTime;
-        public IntPtr lpHeaderInfo;
-        public UInt32 dwHeaderInfoSize;
-        public string lpszFileExtension;
-        public UInt32 dwExemptDelta;
-    };
-}
-
-
-namespace Library.Net
+//https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.notifyicon?redirectedfrom=MSDN&view=netframework-4.8
+//https://stackoverflow.com/questions/14273718/how-do-i-create-a-popup-notification-form
+namespace ScreenShoter
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.InteropServices;
-    using System.Text.RegularExpressions;
-    using DataStructs;
+    using System.Drawing;
+    using System.Windows.Forms;
 
-    public sealed class InternetCache
+    public class Form1 : System.Windows.Forms.Form
     {
-        private const int ERROR_INVALID_PARAMETER = 87;
-        private const int ERROR_INSUFFICIENT_BUFFER = 122;
-        private const int ERROR_NO_MORE_ITEMS = 259;
-        private const int ERROR_NO_TOKEN = 1008;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenu contextMenu1;
+        private System.Windows.Forms.MenuItem menuItem1;
+        private System.ComponentModel.IContainer components;
 
-        /// <summary>
-        /// UrlCache functionality is taken from:
-        /// Scott McMaster (EMAIL REMOVED)
-        /// CodeProject article
-        /// 
-        /// There were some issues with preparing URLs
-        /// for RegExp to work properly. This is
-        /// demonstrated in AllForms.SetupCookieCachePattern method
-        /// 
-        /// urlPattern:
-        /// . Dump the entire contents of the cache.
-        /// Cookie: Lists all cookies on the system.
-        /// Visited: Lists all of the history items.
-        /// Cookie:.*\.example\.com Lists cookies from the example.com domain.
-        /// http://www.example.com/example.html$: Lists the specific named file if present
-        /// \.example\.com: Lists any and all entries from *.example.com.
-        /// \.example\.com.*\.gif$: Lists the .gif files from *.example.com.
-        /// \.js$: Lists the .js files in the cache.
-        /// </summary>
-        /// <param name="urlPattern"></param>
-        /// <returns></returns>
-        public static IEnumerable<INTERNET_CACHE_ENTRY_INFO> FindUrlCacheEntries(string urlPattern)
+        [STAThread]
+        static void Main()
         {
-            var results = new List<INTERNET_CACHE_ENTRY_INFO>();
-
-            var buffer = IntPtr.Zero;
-            UInt32 structSize;
-
-            //This call will fail but returns the size required in structSize
-            //to allocate necessary buffer
-            var hEnum = FindFirstUrlCacheEntry(null, buffer, out structSize);
-            try
-            {
-                if (hEnum == IntPtr.Zero)
-                {
-                    var lastError = Marshal.GetLastWin32Error();
-                    switch (lastError)
-                    {
-                        case ERROR_INSUFFICIENT_BUFFER:
-                            buffer = Marshal.AllocHGlobal((int)structSize);
-                            hEnum = FindFirstUrlCacheEntry(urlPattern, buffer, out structSize);
-                            break;
-                        case ERROR_NO_TOKEN:
-                        case ERROR_NO_MORE_ITEMS:
-                            return results.AsEnumerable();
-                    }
-                }
-
-                var result = (INTERNET_CACHE_ENTRY_INFO)Marshal.PtrToStructure(buffer, typeof(INTERNET_CACHE_ENTRY_INFO));
-                try
-                {
-                    if (Regex.IsMatch(result.lpszSourceUrlName, urlPattern, RegexOptions.IgnoreCase))
-                        results.Add(result);
-                }
-                catch (ArgumentException ae)
-                {
-                    throw new ApplicationException("Invalid regular expression, details=" + ae.Message);
-                }
-
-                if (buffer != IntPtr.Zero)
-                {
-                    try
-                    {
-                        Marshal.FreeHGlobal(buffer);
-                    }
-                    catch
-                    {
-                    }
-                    buffer = IntPtr.Zero;
-                }
-
-                while (true)
-                {
-                    var nextResult = FindNextUrlCacheEntry(hEnum, buffer, out structSize);
-                    structSize *= 4;
-                    if (nextResult != 1) //TRUE
-                    {
-                        var lastError = Marshal.GetLastWin32Error();
-                        switch (lastError)
-                        {
-                            case ERROR_INSUFFICIENT_BUFFER:
-                                buffer = Marshal.AllocHGlobal((int)structSize);
-                                FindNextUrlCacheEntry(hEnum, buffer, out structSize);
-                                break;
-                            case ERROR_NO_MORE_ITEMS:
-                            case ERROR_INVALID_PARAMETER:
-                                return results.AsEnumerable();
-                        }
-                    }
-
-                    if (buffer != IntPtr.Zero)
-                    {
-                        result = (INTERNET_CACHE_ENTRY_INFO)Marshal.PtrToStructure(buffer, typeof(INTERNET_CACHE_ENTRY_INFO));
-                        if (Regex.IsMatch(result.lpszSourceUrlName, urlPattern, RegexOptions.IgnoreCase))
-                            results.Add(result);
-
-
-                        try
-                        {
-                            Marshal.FreeHGlobal(buffer);
-                        }
-                        catch
-                        {
-                        }
-                        buffer = IntPtr.Zero;
-                    }
-                }
-            }
-            finally
-            {
-                if (hEnum != IntPtr.Zero)
-                    FindCloseUrlCache(hEnum);
-                if (buffer != IntPtr.Zero)
-                    try
-                    {
-                        Marshal.FreeHGlobal(buffer);
-                    }
-                    catch
-                    {
-                    }
-            }
+            Application.Run(new Form1());
         }
 
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern IntPtr FindFirstUrlCacheEntry(string lpszUrlSearchPattern,
-                                                           IntPtr lpFirstCacheEntryInfo,
-                                                           out UInt32 lpdwFirstCacheEntryInfoBufferSize);
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern long FindNextUrlCacheEntry(IntPtr hEnumHandle,
-                                                        IntPtr lpNextCacheEntryInfo,
-                                                        out UInt32 lpdwNextCacheEntryInfoBufferSize);
+        public Form1()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.contextMenu1 = new ContextMenu();
+            this.menuItem1 = new MenuItem();
 
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern long FindCloseUrlCache(IntPtr hEnumHandle);
+            // Initialize contextMenu1
+            this.contextMenu1.MenuItems.AddRange(
+                        new MenuItem[] { this.menuItem1 });
 
+            // Initialize menuItem1
+            this.menuItem1.Index = 0;
+            this.menuItem1.Text = "E&xit";
+            this.menuItem1.Click += new EventHandler(this.menuItem1_Click);
+
+            // Set up how the form should be displayed.
+            this.ClientSize = new Size(10, 10);
+            this.WindowState = FormWindowState.Minimized;
+
+            // Create the NotifyIcon.
+            this.notifyIcon1 = new NotifyIcon(this.components);
+
+            // The Icon property sets the icon that will appear
+            // in the systray for this application.
+            notifyIcon1.Icon = new Icon(SystemIcons.Exclamation, 40, 40);
+
+            // The ContextMenu property sets the menu that will
+            // appear when the systray icon is right clicked.
+            notifyIcon1.ContextMenu = this.contextMenu1;
+
+            // The Text property sets the text that will be displayed,
+            // in a tooltip, when the mouse hovers over the systray icon.
+            //notifyIcon1.Text = "Form1 (NotifyIcon example)";
+            notifyIcon1.Visible = true;
+
+            // Handle the DoubleClick event to activate the form.
+            notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            // Clean up any components being used.
+            if (disposing)
+                if (components != null)
+                    components.Dispose();
+
+            base.Dispose(disposing);
+        }
+
+        private void notifyIcon1_DoubleClick(object Sender, EventArgs e)
+        {
+            notifyIcon1.ShowBalloonTip(1, "captured", "s_c", new ToolTipIcon());
+         }
+
+        private void menuItem1_Click(object Sender, EventArgs e)
+        {
+            // Close the form, which closes the application.
+            this.Close();
+        }
     }
 }
-

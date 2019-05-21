@@ -1,43 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Automation;
-using System.Windows.Forms;
-
+using System.Diagnostics;
 namespace ScreenShoter
 {
-    class Class3
+    class BrowserHandler
     {
+        public const string APP = "StringFromApp";
+        public const string PROCESS_CHROME = "chrome";
+        public const string PROCESS_UNKNOWN = "other";
 
-        public static string GetURL(string processName)
+        public static string GetURL(string processName) {
+            if (processName.Equals(PROCESS_CHROME))
+                return GetChromeURL();
+            else
+                return APP;
+        }
+
+        private static string GetChromeURL()
         {
             string url = "";
-            foreach (Process process in Process.GetProcessesByName(processName))
+            foreach (Process process in Process.GetProcessesByName(PROCESS_CHROME))
             {
                 url = GetChromeUrl(process);
-                if (url == null)
+                if (url == null||url.Equals(""))
                     continue;
                 else break;
             }
-            System.Diagnostics.Debugger.Log(0, "", "\n" + url + "\n");
             return url?.ToString();
-        }
-
-        public static void RunMe2()
-        {
-            foreach (Process process in Process.GetProcessesByName("chrome"))
-            {
-                string url = GetChromeUrl(process);
-                if (url == null)
-                    continue;
-
-                Console.WriteLine("CH Url for '" + process.MainWindowTitle + "' is " + url);
-            }
-            Console.ReadLine();
         }
 
         private static string GetChromeUrl(Process process)
@@ -52,14 +41,9 @@ namespace ScreenShoter
             if (element == null)
                 return null;
 
-
             AutomationElementCollection elm1 = element.FindAll(TreeScope.Subtree, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit));
-            if (elm1.Count == 0)
-                return null;
-
             AutomationElement elm = elm1[0];
             string vp = ((ValuePattern)elm.GetCurrentPattern(ValuePattern.Pattern)).Current.Value as string;
-            Console.WriteLine(vp);
             return vp;
         }
     }

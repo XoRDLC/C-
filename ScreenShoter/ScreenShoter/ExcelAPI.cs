@@ -11,21 +11,26 @@ namespace ScreenShoter
 {
     public class ExcelAPI
     {
-        private enum SOUND {
-            PASTE, DELETE, ERROR
-        }
 
         private static Excel.Application exlApp;
         static ExcelAPI() {
-            exlApp = new Excel.Application
+            if (exlApp != null) return;
+
+            try
             {
-                Visible = true,
-                DisplayAlerts = true
-            };
+                exlApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+            }
+            catch (System.Runtime.InteropServices.COMException ex) {
+                exlApp = new Excel.Application();
+                FNotification.CustomBallonTip = "инициализация Excel: " + ex.ToString();
+            }
+            finally {
+                exlApp.Visible = true;
+            }
         }
 
         private const string prefix = "Снимок ";
-        private const string suffix = ", источник: ";
+        private const string suffix = "; Источник: ";
 
         private Excel.Workbook wb;
         private Excel.Worksheet sh;
@@ -47,8 +52,8 @@ namespace ScreenShoter
                 multiScreenCount = 1;
                 sURL = URL;
             }
-            else multiScreenCount++; 
- 
+            else multiScreenCount++;
+
             /*
              * TODO
              * При переключениями между экземплярами ExcelAPI 
@@ -56,8 +61,14 @@ namespace ScreenShoter
              * При тестировании wb.Activate() решило проблему
              * поискать адекватное решение
             */
-
-            wb.Activate();
+            if (exlApp.Ready)
+                wb.Activate();
+            else
+            {
+                FNotification.CustomBallonTip = 
+                    "Excel ожидает подтверждения, снимок не сохранён";
+                return;
+            }
 
             int iStartPosition = 2;
             int iFreeColumn = 1;
@@ -97,10 +108,19 @@ namespace ScreenShoter
                 PutUrlToClipboard(URL);
             }
 
-            if (iShCount == 0) wb.SaveAs();
-            else if (iShCount % 10 == 0) wb.Save();
 
-            PlaySound(SOUND.PASTE);
+            try
+            {
+                if (iShCount == 0)
+                    wb.SaveAs(Type.Missing, Type.Missing, Type.Missing);
+                else if (iShCount % 10 == 0)
+                    wb.Save();
+                Publisher.ScreenCaptured();
+            }
+            catch(System.Runtime.InteropServices.COMException ex)
+            {
+                FNotification.CustomBallonTip = "ошибка при сохранении: " + ex.ToString();
+            }
         }
 
         public void DeleteLastShape()
@@ -110,10 +130,9 @@ namespace ScreenShoter
                 int iShapesCount = sh.Shapes.Count;
                 if (iShapesCount > 0 && multiScreenCount > 0) { 
                     sh.Shapes.Item(iShapesCount).Delete();
-                    multiScreenCount--;
-                    if (multiScreenCount == 0) sURL = "";
+                    if (--multiScreenCount == 0) sURL = "";
 
-                    PlaySound(SOUND.DELETE);
+                    Publisher.ScreenDeleted();
                 }
             }
         }
@@ -133,23 +152,5 @@ namespace ScreenShoter
             thread.Join();
         }
 
-        private static void PlaySound(SOUND soundType) {
-            System.Media.SoundPlayer player = null;
-            string winPath = Environment.ExpandEnvironmentVariables("%SystemRoot%") + "\\Media\\";
-            switch (soundType)
-            {
-                case SOUND.PASTE:
-                    player = new System.Media.SoundPlayer(winPath + "Speech On.wav");
-                    break;
-                case SOUND.DELETE:
-                    player = new System.Media.SoundPlayer(winPath + "Speech Off.wav");
-                    break;
-                case SOUND.ERROR:
-                    break;
-                default:
-                    throw new ArgumentException("add argument: " + soundType.ToString());
-            }
-            player?.Play();
-        }
     }
 }

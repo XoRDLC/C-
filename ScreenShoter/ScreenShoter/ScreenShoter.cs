@@ -41,8 +41,16 @@ namespace ScreenShoter
             out int cutLeft, out int cutRight, out double zoom, 
             out string process) {
             string activeWindow = GetActiveWindowTitle();
-
-            if (activeWindow.IndexOf("Google Chrome") >= 0)
+            if (activeWindow == null)
+            {
+                cutTop = CUT_TOP_DEF;
+                cutBottom = CUT_BOTTOM_DEF;
+                cutLeft = CUT_LEFT_DEF;
+                cutRight = CUT_RIGHT_DEF;
+                zoom = ZOOM_DEF;
+                process = BrowserHandler.APP;
+            }
+            else if (activeWindow.IndexOf("Google Chrome") >= 0)
             {
                 cutTop = CUT_TOP_DEF;
                 cutBottom = CUT_BOTTOM_DEF;
@@ -53,7 +61,8 @@ namespace ScreenShoter
             }
             else if (activeWindow.IndexOf("Яндекс.Браузер") >= 0 ||
                 activeWindow.IndexOf("Opera") >= 0 ||
-                activeWindow.IndexOf("Firefox") >= 0) {
+                activeWindow.IndexOf("Firefox") >= 0)
+            {
                 cutTop = CUT_TOP_DEF;
                 cutBottom = CUT_BOTTOM_DEF;
                 cutLeft = CUT_LEFT_DEF;

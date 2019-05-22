@@ -26,10 +26,13 @@ namespace ScreenShoter
         private ExcelAPI screensSP = null;
         private ExcelAPI currentApi = null;
 
+        private FNotification fNotification = null;
+
         [STAThread]
         public void Run()        {
             _hookID = SetHook(_proc);
-            Application.Run();
+            fNotification = new FNotification();
+            Application.Run(fNotification);
             UnhookWindowsHookEx(_hookID);
         }
 
@@ -61,13 +64,14 @@ namespace ScreenShoter
                     (lastPressedKey == stopKeyDeleteLast_Key1 &&
                      (Keys)vkCode == stopKeyDeleteLast_Key2);
 
-                Console.WriteLine($"{vkCode}\t{(Keys)vkCode}\t{isDeleteLast}\t{lastPressedKey}");
+                FNotification.TextLine = $"{vkCode, -3}\t{(Keys)vkCode, -20}\t{lastPressedKey, -20}\t{isDeleteLast}";
                 lastPressedKey = (Keys)vkCode;
 
                 if ((Keys)vkCode == stopKeyZP || 
                     (Keys)vkCode == stopKeySP ||
                     isDeleteLast) 
                 {
+                    Publisher.HideBallonTip();
                     Thread thread = new Thread(() => {
                         Bitmap BM = null;
                         string url = null;

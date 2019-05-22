@@ -9,11 +9,11 @@ namespace ScreenShoter
         //https://vscode.ru/prog-lessons/kak-delat-skrinshotyi-s-sharp.html
 
 
-        //[STAThread]
-        //public static void Main()
-        //{
-        //    InterceptKeys iKey = new InterceptKeys();
-        //    iKey.Run();
-        //}
+        [STAThread]
+        public static void Main()
+        {
+            InterceptKeys iKey = new InterceptKeys();
+            iKey.Run();
+        }
     }
 }

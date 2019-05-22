@@ -32,33 +32,34 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Properties\App.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrowserHandler.cs" />
-    <Compile Include="Class1.cs">
+    <Compile Include="Forms\Notification.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExcelAPI.cs" />
     <Compile Include="InterceptKeys.cs" />
+    <Compile Include="Publisher.cs" />
     <Compile Include="ScreenShoter.cs" />
     <Compile Include="_Main.cs" />
-    <Compile Include="FSettings.cs">
+    <Compile Include="Forms\FSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FSettings.Designer.cs">
+    <Compile Include="Forms\FSettings.Designer.cs">
       <DependentUpon>FSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="FShowBitmap.cs">
+    <Compile Include="Forms\FShowBitmap.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FShowBitmap.Designer.cs">
+    <Compile Include="Forms\FShowBitmap.Designer.cs">
       <DependentUpon>FShowBitmap.cs</DependentUpon>
     </Compile>
-    <Compile Include="FStart.cs">
+    <Compile Include="Forms\FStart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FStart.Designer.cs">
+    <Compile Include="Forms\FStart.Designer.cs">
       <DependentUpon>FStart.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -78,16 +79,17 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FShowBitmap.resx">
+    <EmbeddedResource Include="Forms\FShowBitmap.resx">
       <DependentUpon>FShowBitmap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FStart.resx">
+    <EmbeddedResource Include="Forms\FStart.resx">
       <DependentUpon>FStart.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Notification.resx">
+      <DependentUpon>Notification.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="SHDocVw">
       <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>

@@ -11,7 +11,11 @@ namespace ScreenShoter
 
         public static string GetURL(string processName) {
             if (processName.Equals(PROCESS_CHROME))
-                return GetChromeURL();
+            {
+                string result = GetChromeURL();
+                return result == null ? APP : result;
+            }
+                
             else
                 return APP;
         }
@@ -41,7 +45,10 @@ namespace ScreenShoter
             if (element == null)
                 return null;
 
-            AutomationElementCollection elm1 = element.FindAll(TreeScope.Subtree, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit));
+            PropertyCondition condition = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit);
+            AutomationElementCollection elm1 = element.FindAll(TreeScope.Subtree, condition);
+            if (elm1 == null || elm1.Count == 0)
+                return null;
             AutomationElement elm = elm1[0];
             string vp = ((ValuePattern)elm.GetCurrentPattern(ValuePattern.Pattern)).Current.Value as string;
             return vp;

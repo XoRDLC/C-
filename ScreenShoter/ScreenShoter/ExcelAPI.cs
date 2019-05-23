@@ -58,7 +58,7 @@ namespace ScreenShoter
              * TODO
              * При переключениями между экземплярами ExcelAPI 
              * иногда вставляет картинки не в ту книгу.
-             * При тестировании wb.Activate() решило проблему
+             * При тестировании wb.Activate() решило проблему.
              * поискать адекватное решение
             */
             if (exlApp.Ready)
@@ -76,7 +76,7 @@ namespace ScreenShoter
             
             /* 
              * смещение снимка относительно предыдущего
-             * если снимки от одной ссылки, размещать справо налево
+             * если снимки от одной ссылки, размещать слева направо
              */
 
             if (iShCount > 0) {
@@ -108,7 +108,6 @@ namespace ScreenShoter
                 PutUrlToClipboard(URL);
             }
 
-
             try
             {
                 if (iShCount == 0)
@@ -136,6 +135,7 @@ namespace ScreenShoter
                 }
             }
         }
+
         //без отдельного потока в буфер не запиховывается
         private static void PutUrlToClipboard(object obj) {
             Thread thread = new Thread(() =>
@@ -151,6 +151,5 @@ namespace ScreenShoter
             thread.Start();
             thread.Join();
         }
-
     }
 }

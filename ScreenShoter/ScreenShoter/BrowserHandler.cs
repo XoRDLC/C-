@@ -5,7 +5,6 @@ namespace ScreenShoter
 {
     class BrowserHandler
     {
-        public const string APP = "StringFromApp";
         public const string PROCESS_CHROME = "chrome";
         public const string PROCESS_UNKNOWN = "other";
 
@@ -13,11 +12,11 @@ namespace ScreenShoter
             if (processName.Equals(PROCESS_CHROME))
             {
                 string result = GetChromeURL();
-                return result == null ? APP : result;
+                return result == null ? PROCESS_UNKNOWN : result;
             }
                 
             else
-                return APP;
+                return PROCESS_UNKNOWN;
         }
 
         private static string GetChromeURL()

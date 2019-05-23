@@ -48,7 +48,7 @@ namespace ScreenShoter
                 cutLeft = CUT_LEFT_DEF;
                 cutRight = CUT_RIGHT_DEF;
                 zoom = ZOOM_DEF;
-                process = BrowserHandler.APP;
+                process = BrowserHandler.PROCESS_UNKNOWN;
             }
             else if (activeWindow.IndexOf("Google Chrome") >= 0)
             {
@@ -78,8 +78,7 @@ namespace ScreenShoter
                 cutRight = 0;
                 zoom = 0.75;
                 process = BrowserHandler.PROCESS_UNKNOWN;
-            }
-                
+            }                
         }
 
         [DllImport("user32.dll")]

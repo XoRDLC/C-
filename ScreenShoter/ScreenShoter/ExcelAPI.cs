@@ -93,7 +93,7 @@ namespace ScreenShoter
 
             PutUrlToClipboard(BM);
             sh.Paste(sh.Cells[iStartPosition + (compositeScreen?0:1), iFreeColumn]);
-            if (!compositeScreen && !URL.Equals(BrowserHandler.APP))
+            if (!compositeScreen && !URL.Equals(BrowserHandler.PROCESS_UNKNOWN))
             {
                 sh.Cells[iStartPosition, 2].Value = URL;
                 sh.Cells[iStartPosition, 1].Select(); // выделение последней добавленной ссылки
@@ -101,7 +101,7 @@ namespace ScreenShoter
 
             //если снимок не браузера (пока даже если не из Хрома), то не вставлять текстовую заглушку
 
-            if (!URL.Equals(BrowserHandler.APP))
+            if (!URL.Equals(BrowserHandler.PROCESS_UNKNOWN))
             {
                 sh.Shapes.Item(iShCount + 1).AlternativeText = 
                     prefix + multiScreenCount + suffix + URL;

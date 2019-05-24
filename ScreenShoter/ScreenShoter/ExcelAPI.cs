@@ -18,11 +18,12 @@ namespace ScreenShoter
 
             try
             {
+
                 exlApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             }
             catch (System.Runtime.InteropServices.COMException ex) {
                 exlApp = new Excel.Application();
-                FNotification.CustomBallonTip = "инициализация Excel: " + ex.ToString();
+                //FNotification.CustomBallonTip = "инициализация Excel: " + ex.ToString();
             }
             finally {
                 exlApp.Visible = true;

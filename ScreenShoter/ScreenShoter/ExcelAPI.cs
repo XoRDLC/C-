@@ -20,6 +20,7 @@ namespace ScreenShoter
 
             try
             {
+
                 exlApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             }
             catch (System.Runtime.InteropServices.COMException ex) {
@@ -32,7 +33,6 @@ namespace ScreenShoter
 
         private const string prefix = "Снимок ";
         private const string suffix = "; Источник: ";
-
         private Excel.Workbook wb;
         private Excel.Worksheet sh;
         private const byte urlColumn = 2;

@@ -191,6 +191,6 @@ namespace ScreenShoter
             this.ResumeLayout(false);
             this.PerformLayout();
 
-        }        
+        }
     }
 }

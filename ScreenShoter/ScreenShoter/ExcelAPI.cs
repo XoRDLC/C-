@@ -4,9 +4,11 @@ using System.Threading;
 using System.Drawing;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 //Environment: https://docs.microsoft.com/en-us/dotnet/api/system.environment?view=netframework-4.8
 //Notifications: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.notifyicon?redirectedfrom=MSDN&view=netframework-4.8
+//OpenFileDialog: https://docs.microsoft.com/ru-ru/dotnet/api/system.windows.forms.openfiledialog?view=netframework-4.8
 namespace ScreenShoter
 {
     public class ExcelAPI
@@ -22,7 +24,6 @@ namespace ScreenShoter
             }
             catch (System.Runtime.InteropServices.COMException ex) {
                 exlApp = new Excel.Application();
-                FNotification.CustomBallonTip = "инициализация Excel: " + ex.ToString();
             }
             finally {
                 exlApp.Visible = true;
@@ -37,12 +38,33 @@ namespace ScreenShoter
         private const byte urlColumn = 2;
         private string sURL = "";
         private int multiScreenCount = 0;
-
+        
         public void PasteInWorksheet(string URL, ref Bitmap BM)
-        {
+        {    
+            if (wb != null) {
+                try {
+                    wb.Name.ToString();
+                }
+                catch(System.Runtime.InteropServices.COMException ex) {
+                    FNotification.CustomBallonTip = "Книга была закрыта\t" + ex.ToString();
+                    wb = null;
+                }
+            }
             if (wb == null)
             {
-                wb = exlApp.Workbooks.Add();
+                string fileName =  GetFilePath();
+                if (fileName == null || fileName.Equals(string.Empty))
+                    wb = exlApp.Workbooks.Add();
+                else {
+                    try
+                    {
+                        wb = exlApp.Workbooks.Open(fileName);
+                    }
+                    catch(System.Runtime.InteropServices.COMException ex) {
+                        FNotification.CustomBallonTip = "Формат выбранного файла не Excel" + ex.ToString();
+                        return;
+                    }
+                }
                 sh = wb.ActiveSheet;
             }
 
@@ -61,6 +83,7 @@ namespace ScreenShoter
              * При тестировании wb.Activate() решило проблему.
              * поискать адекватное решение
             */
+            
             if (exlApp.Ready)
                 wb.Activate();
             else
@@ -95,8 +118,15 @@ namespace ScreenShoter
             sh.Paste(sh.Cells[iStartPosition + (compositeScreen?0:1), iFreeColumn]);
             if (!compositeScreen && !URL.Equals(BrowserHandler.PROCESS_UNKNOWN))
             {
+                if (exlApp.Ready) sh.Activate();
                 sh.Cells[iStartPosition, 2].Value = URL;
-                sh.Cells[iStartPosition, 1].Select(); // выделение последней добавленной ссылки
+                try
+                {
+                    sh.Cells[iStartPosition, 1].Select(); // выделение последней добавленной ссылки
+                }
+                catch (System.Runtime.InteropServices.COMException ex) {
+                    FNotification.CustomBallonTip = "ошибка при выделении: " + ex.ToString();
+                }
             }
 
             //если снимок не браузера (пока даже если не из Хрома), то не вставлять текстовую заглушку
@@ -110,9 +140,10 @@ namespace ScreenShoter
 
             try
             {
+                /*
                 if (iShCount == 0)
                     wb.SaveAs(Type.Missing, Type.Missing, Type.Missing);
-                else if (iShCount % 10 == 0)
+                else if (iShCount % 10 == 0) */
                     wb.Save();
                 Publisher.ScreenCaptured();
             }
@@ -120,6 +151,31 @@ namespace ScreenShoter
             {
                 FNotification.CustomBallonTip = "ошибка при сохранении: " + ex.ToString();
             }
+        }
+
+        private string GetFilePath()
+        {
+            var filePath = string.Empty;
+            Thread thread = new Thread(() =>
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    //openFileDialog.InitialDirectory = "c:\\";
+                    openFileDialog.Filter = "Excel files (*.xls*)|*.xls*";
+                    openFileDialog.FilterIndex = 2;
+                    openFileDialog.RestoreDirectory = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        //Get the path of specified file
+                        filePath = openFileDialog.FileName;
+                    }
+                }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+            return filePath;
         }
 
         public void DeleteLastShape()

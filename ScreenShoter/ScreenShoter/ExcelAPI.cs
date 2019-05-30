@@ -104,6 +104,8 @@ namespace ScreenShoter
 
             if (iShCount > 0) {
                 Excel.Shape shape = sh.Shapes.Item(iShCount);
+                if (shape.Type != Microsoft.Office.Core.MsoShapeType.msoPicture)
+                    shape = sh.Shapes.Item(iShCount - 1);
                 if (!compositeScreen)
                     iStartPosition = shape.BottomRightCell.Row + 1;
                 else {

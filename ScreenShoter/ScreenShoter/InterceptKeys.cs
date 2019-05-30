@@ -18,7 +18,7 @@ namespace ScreenShoter
 
         private const Keys stopKeyZP = Keys.PrintScreen;
         private const Keys stopKeySP = Keys.F10;
-        private const Keys stopKeyDeleteLast_Key1 = Keys.LControlKey;
+        private const Keys stopKeyDeleteLast_Key1 = Keys.RControlKey;
         private const Keys stopKeyDeleteLast_Key2 = Keys.Back;
         private Keys lastPressedKey = Keys.None;
 

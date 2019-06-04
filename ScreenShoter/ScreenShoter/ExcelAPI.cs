@@ -20,7 +20,6 @@ namespace ScreenShoter
 
             try
             {
-
                 exlApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             }
             catch (System.Runtime.InteropServices.COMException ex) {
@@ -31,11 +30,12 @@ namespace ScreenShoter
             }
         }
 
-        private const string prefix = "Снимок ";
-        private const string suffix = "; Источник: ";
+        private const string PREFIX = "Снимок ";
+        private const string SUFFIX = "; Источник: ";
+        private const byte URLColumn = 2;
+
         private Excel.Workbook wb;
         private Excel.Worksheet sh;
-        private const byte urlColumn = 2;
         private string sURL = "";
         private int multiScreenCount = 0;
         
@@ -106,6 +106,7 @@ namespace ScreenShoter
                 Excel.Shape shape = sh.Shapes.Item(iShCount);
                 if (shape.Type != Microsoft.Office.Core.MsoShapeType.msoPicture)
                     shape = sh.Shapes.Item(iShCount - 1);
+
                 if (!compositeScreen)
                     iStartPosition = shape.BottomRightCell.Row + 1;
                 else {
@@ -116,7 +117,7 @@ namespace ScreenShoter
 
             //TODO найти как вставить снимок экрана без вставки его в буфер
 
-            PutUrlToClipboard(BM);
+            PutlToClipboard(BM);
             sh.Paste(sh.Cells[iStartPosition + (compositeScreen?0:1), iFreeColumn]);
             if (!compositeScreen && !URL.Equals(BrowserHandler.PROCESS_UNKNOWN))
             {
@@ -136,8 +137,8 @@ namespace ScreenShoter
             if (!URL.Equals(BrowserHandler.PROCESS_UNKNOWN))
             {
                 sh.Shapes.Item(iShCount + 1).AlternativeText = 
-                    prefix + multiScreenCount + suffix + URL;
-                PutUrlToClipboard(URL);
+                    PREFIX + multiScreenCount + SUFFIX + URL;
+                PutlToClipboard(URL);
             }
 
             try
@@ -194,8 +195,9 @@ namespace ScreenShoter
             }
         }
 
-        //без отдельного потока в буфер не запиховывается
-        private static void PutUrlToClipboard(object obj) {
+        private static void PutlToClipboard(object obj)
+        {
+            //без отдельного потока в буфер не запиховывается
             Thread thread = new Thread(() =>
             {
                 if (obj is string)

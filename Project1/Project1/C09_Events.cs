@@ -3,7 +3,7 @@ using static Learning.Statics;
 
 namespace Learning
 {
-    public class Class1 {
+    public class C09_Events {
         public void Main() {
             UserEventHandler();
             UserEventArgs();

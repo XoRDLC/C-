@@ -59,6 +59,8 @@
     <Compile Include="C05_UsingStatement.cs" />
     <Compile Include="C07_Arrays.cs" />
     <Compile Include="C08_Delegates.cs" />
+    <Compile Include="C09_Events.cs" />
+    <Compile Include="C10_Interfaces.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="_Main.cs" />
     <Compile Include="C06_StructEnum.cs" />

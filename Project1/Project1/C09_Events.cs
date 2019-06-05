@@ -29,7 +29,7 @@ namespace Learning
     }
 
 
-    #region Event, reassign accessor; not implemented
+    #region Event, reassign accessors; not implemented
     class UserAccessorsEvent
     {
         public event EventHandler Eve {

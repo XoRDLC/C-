@@ -8,40 +8,24 @@ namespace Learning
 {
     class Class1
     {
-        public void Main()
-        {
-            Test_CheckedUnchecked();
+        public void Main() {
+            Test_Generics();
         }
 
-        public static void Test_CheckedUnchecked()
-        {
-            int i = 1_000_000;
-            byte b = unchecked((byte)i);
-            Console.WriteLine(b);
-            try
-            {
-                byte c = checked((byte)i);
-                Console.WriteLine(c);
+        public static void Test_Generics() { }
+
+        private class Stack<T> {
+            private int Index = 0;
+            T[] Array;
+
+            public void Push(T elem) { }
+
+            public T Pop() {
+
+                return default(T);
             }
-            catch { Console.WriteLine("checked Conversion overflow"); }
-
-            checked {
-                double d = i;
-                byte t;
-                byte j;
-                unchecked
-                {
-                    t = (byte)(i - 1);
-                    j = (byte)(i - 2);
-                }
-                Console.WriteLine(t);
-                Console.WriteLine(j);
-                Console.WriteLine(d);
-            }
-
-            Console.ReadLine();
-
         }
+
     }
 
 

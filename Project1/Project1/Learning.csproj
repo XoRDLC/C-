@@ -62,6 +62,7 @@
     <Compile Include="C09_Events.cs" />
     <Compile Include="C10_Interfaces.cs" />
     <Compile Include="C11_Conversions.cs" />
+    <Compile Include="C12_Generics.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="_Main.cs" />
     <Compile Include="C06_StructEnum.cs" />

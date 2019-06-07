@@ -173,7 +173,6 @@ namespace Learning
         delegate void FactoryV<in T>(T t);  //T contravariant
         delegate void FactoryI<T>(T t);     //T invariat
 
-
         public static void Test_Variance() {
             FactoryR<Cat> cat = Programm.GetCat;
             FactoryR<Animal> animal = cat;

@@ -126,6 +126,7 @@ namespace Learning
             { values = new string[ArraySize]; }
 
             public void Add(string value) {
+                Console.WriteLine($"\tItem [{value}] added");
                 if (counter < values.Length - 1) {
                     values[++counter] = value;
                 }
@@ -148,7 +149,7 @@ namespace Learning
 
             public object Current {
                 get {
-                    if (Position < 0 || Position >= values.Length - 1)
+                    if (Position < 0 || Position >= values.Length )
                         throw new InvalidOperationException();
                     return values[Position];
                 }
@@ -166,31 +167,82 @@ namespace Learning
         }
         #endregion
 
-        public static void Test_GenericIEnumerator() { }
+        public static void Test_GenericIEnumerator() {
+            MyEnumerable<int> myEnumerable = new MyEnumerable<int>(6);
+            myEnumerable.Add(10);
+            myEnumerable.Add(17);
+            myEnumerable.Add(19);
+            myEnumerable.Add(100);
+            myEnumerable.Add(101);
+            myEnumerable.Add(103);
+            myEnumerable.Add(105);
+
+            foreach (int i in myEnumerable) {
+                Console.Write($"{i} ");
+            }
+            Console.WriteLine();
+
+            MyEnumerable<MyEnumerable> me = new MyEnumerable<MyEnumerable>(2);
+            me.Add(new MyEnumerable(2) { "Test1", "Test2" });
+            me.Add(new MyEnumerable(2) { "Test3", "Test4" });
+
+            foreach (MyEnumerable my in me) {
+                Console.WriteLine($"{my.GetType()} {me.GetType()}");
+                foreach (string s in my) {
+                    Console.Write($"{s} ");
+                }
+                Console.WriteLine();
+            }
+
+
+            Console.ReadLine();
+        }
 
         private class MyEnumerable<T> : IEnumerable
         {
             private T[] values;
+            private int counter = -1;
+
+            public MyEnumerable() => values = new T[5];
+            public MyEnumerable(int ArraySize) => values = new T[ArraySize];
+            public void Add(T value)
+            {
+                if (counter < values.Length - 1)
+                {
+                    values[++counter] = value;
+                }
+            }
             public IEnumerator GetEnumerator()
             {
-                throw new NotImplementedException();
+                return new MyEnumerator<T>(values);
             }
         }
 
-        private class MyEnumerator<T> : MyEnumerator, IEnumerator
+        private class MyEnumerator<T> : IEnumerator
         {
             private readonly T[] valuesT;
-            private new int Position = -1;
+            private int Position = -1;
 
-            public MyEnumerator(T[] valuesT)
+            public MyEnumerator(T[] valuesT) 
             {
                 this.valuesT = valuesT;
             }
 
-            public object Current {
-                get {
+            public object Current
+            {
+                get
+                {
                     return valuesT[Position];
                 }
+            }
+            public bool MoveNext()
+            {
+                return ++Position < valuesT.Length;
+            }
+
+            public void Reset()
+            {
+                Position = -1;
             }
         }
     }

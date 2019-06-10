@@ -6,11 +6,12 @@ namespace Learning
     class Class1
     {
         public void Main() {
-            Test_IEnumerator();
+            Test_NonGenericIEnumerator();
+            Test_GenericIEnumerator();
         }
 
-
-        private static void Test_IEnumerator() {
+        #region Implementing non generic IEnumerator & IEnumerable, Test_NonGenericIEnumerator()
+        private static void Test_NonGenericIEnumerator() {
             CollectionEnum collectionEnum = new CollectionEnum();
             collectionEnum.AddElement("Kot");
             collectionEnum.AddElement("Vasiliy");
@@ -21,7 +22,29 @@ namespace Learning
             foreach (Text s in collectionEnum) {
                 Console.WriteLine(s);
             }
+            Console.WriteLine();
 
+            MyEnumerable myEnumerable = new MyEnumerable(6);
+            myEnumerable.Add("1");
+            myEnumerable.Add("2");
+            myEnumerable.Add("3");
+            myEnumerable.Add("4");
+            myEnumerable.Add("5");
+            myEnumerable.Add("6");
+            myEnumerable.Add("7");
+
+            IEnumerator enumerator = myEnumerable.GetEnumerator();
+
+            while (enumerator.MoveNext()) {
+                string current = (string)enumerator.Current;
+                Console.WriteLine($"MyEn: {current}");
+            }
+
+            enumerator.Reset();
+            while (enumerator.MoveNext()) {
+                Console.Write($"{enumerator.Current} ");
+            }
+            Console.WriteLine();
             Console.ReadLine();
         }
 
@@ -92,6 +115,83 @@ namespace Learning
             public bool MoveNext() => ++counter <= currentIndex && currentIndex >=0;
 
             public void Reset() => counter = -1;
+        }
+
+        private class MyEnumerable : IEnumerable {
+            private string[] values;
+            private int counter = -1;
+            public MyEnumerable()
+            { values = new string[5];  }
+            public MyEnumerable(int ArraySize)
+            { values = new string[ArraySize]; }
+
+            public void Add(string value) {
+                if (counter < values.Length - 1) {
+                    values[++counter] = value;
+                }
+            }
+
+            public IEnumerator GetEnumerator()
+            {
+                return new MyEnumerator(values);
+            }
+        }
+
+        private class MyEnumerator : IEnumerator
+        {
+            private string[] values;
+            private int Position = -1;
+
+            public MyEnumerator(string[] values) {
+                this.values = values;
+            }
+
+            public object Current {
+                get {
+                    if (Position < 0 || Position >= values.Length - 1)
+                        throw new InvalidOperationException();
+                    return values[Position];
+                }
+            } 
+
+            public bool MoveNext()
+            {
+                return ++Position < values.Length;
+            }
+
+            public void Reset()
+            {
+                Position = -1;
+            }
+        }
+        #endregion
+
+        public static void Test_GenericIEnumerator() { }
+
+        private class MyEnumerable<T> : IEnumerable
+        {
+            private T[] values;
+            public IEnumerator GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class MyEnumerator<T> : MyEnumerator, IEnumerator
+        {
+            private readonly T[] valuesT;
+            private new int Position = -1;
+
+            public MyEnumerator(T[] valuesT)
+            {
+                this.valuesT = valuesT;
+            }
+
+            public object Current {
+                get {
+                    return valuesT[Position];
+                }
+            }
         }
     }
 }

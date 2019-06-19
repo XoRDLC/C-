@@ -1,7 +1,5 @@
-﻿using XoR.Interop;
-using XoR.Interop.Extensibility;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+﻿using System.Windows.Forms;
+using Extensibility;
 using System;
 
 //https://www.mztools.com/articles/2012/MZ2012013.aspx

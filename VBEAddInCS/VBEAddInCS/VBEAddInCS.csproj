@@ -43,26 +43,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="XoR.Interop.Extensibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3efa5378b74e6384, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>bin\Debug\XoR.Interop.Extensibility.dll</HintPath>
-    </Reference>
-    <Reference Include="XoR.Interop.Office12, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3efa5378b74e6384, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>bin\Debug\XoR.Interop.Office12.dll</HintPath>
-    </Reference>
-    <Reference Include="XoR.Interop.Stdole, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3efa5378b74e6384, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>bin\Debug\XoR.Interop.Stdole.dll</HintPath>
-    </Reference>
-    <Reference Include="XoR.Interop.VBAExtensibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3efa5378b74e6384, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>bin\Debug\XoR.Interop.VBAExtensibility.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connect.cs" />

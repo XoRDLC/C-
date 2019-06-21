@@ -332,11 +332,8 @@ namespace VBEAddInCS
             MessageBox.Show("Clicked myCommandBarPopup2Button " + Ctrl.Caption);
         }
         #endregion
-
-
-        private void _codeStatsSettings_Click(
-            CommandBarButton Ctrl,
-            ref bool CancelDefault)
+        
+        private void _codeStatsSettings_Click(CommandBarButton Ctrl, ref bool CancelDefault)
         {
             try
             {
@@ -344,10 +341,16 @@ namespace VBEAddInCS
                 foreach (VBIDE.CodePane codepane in _VBE.CodePanes)
                 {
                     VBIDE.CodeModule codeModule = codepane.CodeModule;
-                    s += codepane.CodeModule + "\t" + codepane.CodeModule.CountOfLines  + "\n";
+                    s += codepane.CodeModule.CountOfLines + "\t" + codepane.CodeModule.Name  + "\n";
                 }
 
                 MessageBox.Show(s);
+                s = String.Empty;
+                foreach (VBIDE.VBProject component in _VBE.VBProjects)
+                    s += component.Name + "\t" + component.FileName + "\n";
+
+                MessageBox.Show(s);
+                MessageBox.Show(_VBE.CodePanes.Current.CodeModule.Name);
             }
             catch (Exception e)
             {

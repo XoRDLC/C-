@@ -7,6 +7,9 @@ using System.IO;
 using System.Text;
 
 //https://www.mztools.com/articles/2012/MZ2012013.aspx
+//https://www.mztools.com/articles/2012/MZ2012015.aspx
+//https://www.mztools.com/articles/2012/MZ2012016.aspx
+//https://www.mztools.com/articles/2012/MZ2012014.aspx
 namespace VBEAddInCS
 {
     public class Connect : IDTExtensibility2

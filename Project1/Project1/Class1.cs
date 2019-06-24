@@ -9,6 +9,5 @@ namespace Learning
     class Class1
     {
         public void Main() { }
-
     }
 }

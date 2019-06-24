@@ -63,6 +63,7 @@
     <Compile Include="C10_Interfaces.cs" />
     <Compile Include="C11_Conversions.cs" />
     <Compile Include="C12_Generics.cs" />
+    <Compile Include="C13_Enumerations.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="_Main.cs" />
     <Compile Include="C06_StructEnum.cs" />

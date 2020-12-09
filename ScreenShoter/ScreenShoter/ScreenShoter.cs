@@ -9,7 +9,7 @@ namespace ScreenShoter
     public static class ScreenShoter
     {
         private const int CUT_TOP_DEF = 36;
-        private const int CUT_BOTTOM_DEF = 63;
+        private const int CUT_BOTTOM_DEF = 66;
         private const int CUT_LEFT_DEF = 0;
         private const int CUT_RIGHT_DEF = 0;
         private const double ZOOM_DEF = 0.5;

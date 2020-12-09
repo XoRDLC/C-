@@ -23,6 +23,7 @@ namespace ScreenShoter
                 exlApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             }
             catch (System.Runtime.InteropServices.COMException ex) {
+                FNotification.CustomBallonTip = "Книга была закрыта\t" + ex.ToString();
                 exlApp = new Excel.Application();
             }
             finally {
@@ -117,8 +118,24 @@ namespace ScreenShoter
 
             //TODO найти как вставить снимок экрана без вставки его в буфер
 
-            PutlToClipboard(BM);
-            sh.Paste(sh.Cells[iStartPosition + (compositeScreen?0:1), iFreeColumn]);
+            try { PutlToClipboard(BM); }
+            catch (Exception ex) {
+                FNotification.CustomBallonTip = "добавление в буфер: " + ex.ToString();
+                PutlToClipboard(BM);
+            }
+            try
+            {
+                sh.Paste(sh.Cells[iStartPosition + (compositeScreen ? 0 : 1), iFreeColumn]);
+            }
+            catch (System.Runtime.InteropServices.COMException ex) {
+                FNotification.CustomBallonTip = "вставка скрина, Excel чем-то занят?" + ex.ToString();
+                sh.Paste(sh.Cells[iStartPosition + (compositeScreen ? 0 : 1), iFreeColumn]);
+
+            }
+            catch (Exception ex) {
+                FNotification.CustomBallonTip = "новая ошибка при вставке скрина на страницу" + ex.ToString();
+                sh.Paste(sh.Cells[iStartPosition + (compositeScreen ? 0 : 1), iFreeColumn]);
+            }
             if (!compositeScreen && !URL.Equals(BrowserHandler.PROCESS_UNKNOWN))
             {
                 if (exlApp.Ready) sh.Activate();

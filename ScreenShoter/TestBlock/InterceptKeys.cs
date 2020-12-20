@@ -3,6 +3,10 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+
+//https://www.fluxbytes.com/csharp/how-to-register-a-global-hotkey-for-your-application-in-c/
+//https://blogs.msdn.microsoft.com/toub/2006/05/03/low-level-keyboard-hook-in-c/
+//
 class InterceptKeys
 {
     private const int WH_KEYBOARD_LL = 13;
